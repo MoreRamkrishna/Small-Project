@@ -1,0 +1,85 @@
+import datetime
+import random
+import string
+
+# Function to print the bill header
+def print_bill_header():
+    print("\n" + "="*43)
+    print(" " * 12 + "Welcome To Market")
+    print("="*43)
+    print("CIN No.: 6453FHS8D684D746")
+    print("GST No.: 3hA9HR76i53k1O")
+    print("Address: ABCDEFGH, ABCDEFG, 01234567")
+    print("Phone No: 1234567890 ")
+    print("-"*15 + " Tax Invoice " + "-"*15)
+    bill_no = random.randint(100000, 9999999)
+    digits_part = ''.join(random.choice(string.digits) for i in range(5))
+    letters_part = ''.join(random.choice(string.ascii_uppercase) for i in range(5))
+    vou_no = letters_part + '-' + digits_part
+    print(f"{'Name: '}{name}{'     Mobile No: '}{mobile}")
+    print(f"{'Bill No: '}{bill_no}{'  Date: '}{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{'Vou. No: '}{vou_no}{'   Cashier Name: '}{cashier}")
+    print("="*43)
+    print(f"{'Item':<15}{'Qty':<10}{'Price':<10}{'Total'}")
+    print("-"*43)
+
+# Function to print the bill footer
+def print_bill_footer(subtotal, tax_rate):
+    tax = subtotal * tax_rate / 100
+    gst = subtotal * tax_rate / 100
+    total = subtotal + tax + gst
+    print("="*43)
+    print(f"{'Subtotal':<35} {subtotal:.2f}")
+    print(f"{'Tax (@'+str(tax_rate)+'%)':<35} {tax:.2f}")
+    print(f"{'GST Tax (@'+str(tax_rate)+'%)':<35} {gst:.2f}")
+    print("="*43)
+    print(f"{'Total':<35} {total:.2f}")
+    print("="*43)
+    print("Thank You For Shopping........")
+
+# Function to add items and calculate subtotal
+def add_items_to_bill():
+  global name, mobile, cashier
+  name = str(input("Enter Your Name: "))
+  mobile = int(input("Enter Your Mobile Number: "))
+  cashier = input("Enter Cashier Name: ")
+  items = []
+  subtotal = 0.0
+  while True:
+    item_name = input("Enter The Item Name (or 'done' to finish): ")
+    if item_name.lower() == 'done':
+      break
+    try:
+      quantity = int(input(f"Enter The Quantity of {item_name}: "))
+      price_per_unit = float(input(f"Enter The Price Per Unit of {item_name}: "))
+    except ValueError:
+      print("Invalid input, please try again.")
+      continue
+        
+    total_price = quantity * price_per_unit
+    subtotal += total_price
+    items.append((item_name, quantity, price_per_unit, total_price))
+    
+  return items, subtotal
+
+# Function to print the bill items
+def print_bill_items(items):
+    for item_name, quantity, price_per_unit, total_price in items:
+        print(f"{item_name:<15}{quantity:<10}{price_per_unit:<10}{total_price:.2f}")
+
+# Main function to generate the bill
+def generate_bill():
+    tax_rate = 5  # You can change the tax rate as needed
+    print("Welcome To The Market")
+    print("Enter Your Items........!")
+    
+    # Get the items from the user
+    items, subtotal = add_items_to_bill()
+    
+    # Print the bill
+    print_bill_header()
+    print_bill_items(items)
+    print_bill_footer(subtotal, tax_rate)
+
+# Run the billing system
+generate_bill()
